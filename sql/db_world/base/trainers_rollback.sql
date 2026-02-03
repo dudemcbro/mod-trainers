@@ -1,0 +1,16 @@
+-- mod-trainers rollback
+-- Apply to: acore_world
+
+SET @MOD_TRAINERS_ENTRY_BASE := 900100;
+SET @MOD_TRAINERS_NUM_RACES := 10;
+SET @MOD_TRAINERS_NUM_CLASSES := 10;
+SET @MOD_TRAINERS_ENTRY_MAX := @MOD_TRAINERS_ENTRY_BASE + (@MOD_TRAINERS_NUM_RACES * @MOD_TRAINERS_NUM_CLASSES) - 1;
+
+-- Remove spawned trainers (only those spawned by this mod)
+DELETE FROM creature WHERE Comment LIKE 'mod-trainers:%';
+
+-- Remove templates + bindings
+DELETE FROM creature_default_trainer WHERE CreatureId BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
+DELETE FROM creature_template_model WHERE CreatureID BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
+DELETE FROM creature_equip_template WHERE CreatureID BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
+DELETE FROM creature_template WHERE entry BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
