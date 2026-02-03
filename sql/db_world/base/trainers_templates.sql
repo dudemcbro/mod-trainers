@@ -21,50 +21,54 @@ CREATE TEMPORARY TABLE tmp_mod_trainers_map (
   PRIMARY KEY (entry)
 ) ENGINE=MEMORY;
 
--- Race base templates (major city NPCs)
---  0 human     -> 68    Stormwind City Guard
---  1 dwarf     -> 5595  Ironforge Guard
---  2 nightelf  -> 4262  Darnassus Sentinel
---  3 gnome     -> 19172 Gnome Commoner
---  4 draenei   -> 16733 Exodar Peacekeeper
---  5 orc       -> 3296  Orgrimmar Grunt
---  6 undead    -> 7980  Deathguard Elite
---  7 tauren    -> 3212  Brave Ironhorn
---  8 troll     -> 18970 Darkspear Axe Thrower
---  9 bloodelf  -> 18799 Silvermoon Citizen
+-- Base templates by race + role (to keep trainer visuals lore-appropriate).
+-- Role groups:
+--   0 = heavy (warrior/paladin/dk)
+--   1 = medium (hunter/rogue/shaman)
+--   2 = caster (priest/mage/warlock/druid)
+--
+-- Race indices:
+--   0 human, 1 dwarf, 2 nightelf, 3 gnome, 4 draenei, 5 orc, 6 undead, 7 tauren, 8 troll, 9 bloodelf
+--
+-- NOTE: These are intentionally simple and resilient: we copy model + weapon equipment from the chosen base NPC.
 
 INSERT INTO tmp_mod_trainers_map (entry, base_entry, trainer_id, name)
 SELECT
   @MOD_TRAINERS_ENTRY_BASE + (c.class_idx * @MOD_TRAINERS_NUM_RACES) + r.race_idx AS entry,
-  r.base_entry,
+  CASE c.role_group
+    WHEN 0 THEN r.base_heavy
+    WHEN 1 THEN r.base_medium
+    ELSE r.base_caster
+  END AS base_entry,
   c.trainer_id,
   c.name
 FROM
 (
-  SELECT 0 AS race_idx, 68 AS base_entry UNION ALL
-  SELECT 1, 5595 UNION ALL
-  SELECT 2, 4262 UNION ALL
-  SELECT 3, 19172 UNION ALL
-  SELECT 4, 16733 UNION ALL
-  SELECT 5, 3296 UNION ALL
-  SELECT 6, 7980 UNION ALL
-  SELECT 7, 3212 UNION ALL
-  SELECT 8, 18970 UNION ALL
-  SELECT 9, 18799
+  -- base_heavy / base_medium / base_caster
+  SELECT 0 AS race_idx, 68    AS base_heavy, 18948 AS base_medium, 18949 AS base_caster UNION ALL -- Stormwind City Guard / Stormwind Soldier / Stormwind Mage
+  SELECT 1,              5595,             727,                9578               UNION ALL -- Ironforge Guard / Ironforge Mountaineer / Ironforge Talent Master
+  SELECT 2,              4262,             16332,              16331              UNION ALL -- Darnassus Sentinel / Darnassian Huntress / Darnassian Druid
+  SELECT 3,              21426,            4430,               19007              UNION ALL -- Gnome Defender / Gnome Pit Crewman / Gnomeregan Conjuror
+  SELECT 4,              16733,            16996,              18815              UNION ALL -- Exodar Peacekeeper / Draenei Vindicator / Exodar Proselyte
+  SELECT 5,              3296,             19425,              18972              UNION ALL -- Orgrimmar Grunt / Orgrimmar Peon / Orgrimmar Shaman
+  SELECT 6,              7980,             5624,               18971              UNION ALL -- Deathguard Elite / Undercity Guardian / Undercity Mage
+  SELECT 7,              3212,             19407,              19603              UNION ALL -- Brave Ironhorn / Thunder Bluff Huntsman / Tauren Shaman
+  SELECT 8,              18970,            18970,              15863              UNION ALL -- Darkspear Axe Thrower / Darkspear Axe Thrower / Darkspear Shaman
+  SELECT 9,              16222,            18147,              19006                         -- Silvermoon City Guardian / Silvermoon Ranger / Silvermoon Magister
 ) r
 CROSS JOIN
 (
   -- trainer_id values come from `trainer` table (Type=0, Requirement=<ClassId>)
-  SELECT 0 AS class_idx, 1  AS trainer_id, 'Warrior Trainer'     AS name UNION ALL
-  SELECT 1,              3,                 'Paladin Trainer'     UNION ALL
-  SELECT 2,              7,                 'Hunter Trainer'      UNION ALL
-  SELECT 3,              9,                 'Rogue Trainer'       UNION ALL
-  SELECT 4,              11,                'Priest Trainer'      UNION ALL
-  SELECT 5,              13,                'Death Knight Trainer' UNION ALL
-  SELECT 6,              14,                'Shaman Trainer'      UNION ALL
-  SELECT 7,              16,                'Mage Trainer'        UNION ALL
-  SELECT 8,              31,                'Warlock Trainer'     UNION ALL
-  SELECT 9,              33,                'Druid Trainer'
+  SELECT 0 AS class_idx, 0 AS role_group, 1  AS trainer_id, 'Warrior Trainer'      AS name UNION ALL
+  SELECT 1,              0,               3,                 'Paladin Trainer'      UNION ALL
+  SELECT 2,              1,               7,                 'Hunter Trainer'       UNION ALL
+  SELECT 3,              1,               9,                 'Rogue Trainer'        UNION ALL
+  SELECT 4,              2,               11,                'Priest Trainer'       UNION ALL
+  SELECT 5,              0,               13,                'Death Knight Trainer' UNION ALL
+  SELECT 6,              1,               14,                'Shaman Trainer'       UNION ALL
+  SELECT 7,              2,               16,                'Mage Trainer'         UNION ALL
+  SELECT 8,              2,               31,                'Warlock Trainer'      UNION ALL
+  SELECT 9,              2,               33,                'Druid Trainer'
 ) c;
 
 -- Create templates

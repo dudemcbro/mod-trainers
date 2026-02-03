@@ -201,25 +201,6 @@ namespace
         return "Unknown";
     }
 
-    uint32 TrainerIdForClass(TrainerClass trainerClass)
-    {
-        switch (trainerClass)
-        {
-            case TrainerClass::Warrior: return 1;
-            case TrainerClass::Paladin: return 3;
-            case TrainerClass::Hunter: return 7;
-            case TrainerClass::Rogue: return 9;
-            case TrainerClass::Priest: return 11;
-            case TrainerClass::DeathKnight: return 13;
-            case TrainerClass::Shaman: return 14;
-            case TrainerClass::Mage: return 16;
-            case TrainerClass::Warlock: return 31;
-            case TrainerClass::Druid: return 33;
-            case TrainerClass::Max: break;
-        }
-        return 0;
-    }
-
     uint32 GetTrainerTemplateEntry(TrainerClass trainerClass, TrainerRace trainerRace)
     {
         return MOD_TRAINERS_ENTRY_BASE + (static_cast<uint32>(trainerClass) * MOD_TRAINERS_NUM_RACES) + static_cast<uint32>(trainerRace);

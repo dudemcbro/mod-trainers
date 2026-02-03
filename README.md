@@ -6,6 +6,7 @@ Overview
 Spawns permanent, DB-backed class trainer NPCs at your current location.
 
 The trainers are neutral-friendly to everyone and persist across restarts.
+Class visuals are based on lore-appropriate major-city NPCs (casters look like casters, etc.).
 
 Commands
 --------
