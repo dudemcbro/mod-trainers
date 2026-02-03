@@ -46,14 +46,14 @@ FROM
 (
   -- base_heavy / base_medium / base_caster
   SELECT 0 AS race_idx, 68    AS base_heavy, 18948 AS base_medium, 18949 AS base_caster UNION ALL -- Stormwind City Guard / Stormwind Soldier / Stormwind Mage
-  SELECT 1,              5595,             727,                9578               UNION ALL -- Ironforge Guard / Ironforge Mountaineer / Ironforge Talent Master
-  SELECT 2,              4262,             16332,              16331              UNION ALL -- Darnassus Sentinel / Darnassian Huntress / Darnassian Druid
+  SELECT 1,              5595,             727,                36858              UNION ALL -- Ironforge Guard / Ironforge Mountaineer / Dwarf Mage
+  SELECT 2,              4262,             16332,              15634              UNION ALL -- Darnassus Sentinel / Darnassian Huntress / Priestess of the Moon
   SELECT 3,              21426,            4430,               19007              UNION ALL -- Gnome Defender / Gnome Pit Crewman / Gnomeregan Conjuror
   SELECT 4,              16733,            16996,              18815              UNION ALL -- Exodar Peacekeeper / Draenei Vindicator / Exodar Proselyte
-  SELECT 5,              3296,             19425,              18972              UNION ALL -- Orgrimmar Grunt / Orgrimmar Peon / Orgrimmar Shaman
+  SELECT 5,              3296,             19425,              36863              UNION ALL -- Orgrimmar Grunt / Orgrimmar Peon / Orc Mage
   SELECT 6,              7980,             5624,               18971              UNION ALL -- Deathguard Elite / Undercity Guardian / Undercity Mage
-  SELECT 7,              3212,             19407,              19603              UNION ALL -- Brave Ironhorn / Thunder Bluff Huntsman / Tauren Shaman
-  SELECT 8,              18970,            18970,              15863              UNION ALL -- Darkspear Axe Thrower / Darkspear Axe Thrower / Darkspear Shaman
+  SELECT 7,              3212,             19407,              36865              UNION ALL -- Brave Ironhorn / Thunder Bluff Huntsman / Tauren Priest
+  SELECT 8,              18970,            18970,              17935              UNION ALL -- Darkspear Axe Thrower / Darkspear Axe Thrower / Horde Witch Doctor
   SELECT 9,              16222,            18147,              19006                         -- Silvermoon City Guardian / Silvermoon Ranger / Silvermoon Magister
 ) r
 CROSS JOIN
