@@ -48,7 +48,7 @@ FROM
   SELECT 0 AS race_idx, 68    AS base_heavy, 18948 AS base_medium, 18949 AS base_caster UNION ALL -- Stormwind City Guard / Stormwind Soldier / Stormwind Mage
   SELECT 1,              5595,             727,                36858              UNION ALL -- Ironforge Guard / Ironforge Mountaineer / Dwarf Mage
   SELECT 2,              4262,             16332,              15634              UNION ALL -- Darnassus Sentinel / Darnassian Huntress / Priestess of the Moon
-  SELECT 3,              21426,            4430,               19007              UNION ALL -- Gnome Defender / Gnome Pit Crewman / Gnomeregan Conjuror
+  SELECT 3,              39252,            4430,               19007              UNION ALL -- Gnomeregan Infantry / Gnome Pit Crewman / Gnomeregan Conjuror
   SELECT 4,              16733,            16996,              18815              UNION ALL -- Exodar Peacekeeper / Draenei Vindicator / Exodar Proselyte
   SELECT 5,              3296,             19425,              36863              UNION ALL -- Orgrimmar Grunt / Orgrimmar Peon / Orc Mage
   SELECT 6,              7980,             5624,               18971              UNION ALL -- Deathguard Elite / Undercity Guardian / Undercity Mage
