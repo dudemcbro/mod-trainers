@@ -6,7 +6,7 @@ Overview
 Spawns permanent, DB-backed class trainer NPCs at your current location.
 
 The trainers are neutral-friendly to everyone and persist across restarts.
-Class visuals are based on lore-appropriate major-city NPCs (casters look like casters, etc.).
+Class visuals and equipped weapons are class-specific per race/class template mapping.
 
 Commands
 --------
@@ -31,6 +31,8 @@ Apply to `acore_world`:
 ```
 mysql < modules/mod-trainers/sql/install.sql
 ```
+
+For already-spawned mod trainers, restart `worldserver` (or reload creature templates) so live NPCs pick up the new visual/equipment templates.
 
 Rollback
 --------

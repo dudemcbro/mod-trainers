@@ -21,54 +21,61 @@ CREATE TEMPORARY TABLE tmp_mod_trainers_map (
   PRIMARY KEY (entry)
 ) ENGINE=MEMORY;
 
--- Base templates by race + role (to keep trainer visuals lore-appropriate).
--- Role groups:
---   0 = heavy (warrior/paladin/dk)
---   1 = medium (hunter/rogue/shaman)
---   2 = caster (priest/mage/warlock/druid)
+-- Base templates by race + class (class-accurate visuals/equipment).
+-- Each base entry is a class-appropriate NPC template from core data.
+-- If a race lacks a reliable high-level native class trainer with equipment,
+-- a class-consistent fallback trainer entry is used.
 --
 -- Race indices:
 --   0 human, 1 dwarf, 2 nightelf, 3 gnome, 4 draenei, 5 orc, 6 undead, 7 tauren, 8 troll, 9 bloodelf
 --
--- NOTE: These are intentionally simple and resilient: we copy model + weapon equipment from the chosen base NPC.
+-- Class indices:
+--   0 warrior, 1 paladin, 2 hunter, 3 rogue, 4 priest, 5 death knight, 6 shaman, 7 mage, 8 warlock, 9 druid
 
 INSERT INTO tmp_mod_trainers_map (entry, base_entry, trainer_id, name)
 SELECT
   @MOD_TRAINERS_ENTRY_BASE + (c.class_idx * @MOD_TRAINERS_NUM_RACES) + r.race_idx AS entry,
-  CASE c.role_group
-    WHEN 0 THEN r.base_heavy
-    WHEN 1 THEN r.base_medium
-    ELSE r.base_caster
+  CASE c.class_idx
+    WHEN 0 THEN r.base_warrior
+    WHEN 1 THEN r.base_paladin
+    WHEN 2 THEN r.base_hunter
+    WHEN 3 THEN r.base_rogue
+    WHEN 4 THEN r.base_priest
+    WHEN 5 THEN r.base_death_knight
+    WHEN 6 THEN r.base_shaman
+    WHEN 7 THEN r.base_mage
+    WHEN 8 THEN r.base_warlock
+    ELSE r.base_druid
   END AS base_entry,
   c.trainer_id,
   c.name
 FROM
 (
-  -- base_heavy / base_medium / base_caster
-  SELECT 0 AS race_idx, 68    AS base_heavy, 18948 AS base_medium, 18949 AS base_caster UNION ALL -- Stormwind City Guard / Stormwind Soldier / Stormwind Mage
-  SELECT 1,              5595,             727,                36858              UNION ALL -- Ironforge Guard / Ironforge Mountaineer / Dwarf Mage
-  SELECT 2,              4262,             16332,              15634              UNION ALL -- Darnassus Sentinel / Darnassian Huntress / Priestess of the Moon
-  SELECT 3,              39252,            4430,               19007              UNION ALL -- Gnomeregan Infantry / Gnome Pit Crewman / Gnomeregan Conjuror
-  SELECT 4,              16733,            16996,              18815              UNION ALL -- Exodar Peacekeeper / Draenei Vindicator / Exodar Proselyte
-  SELECT 5,              3296,             19425,              36863              UNION ALL -- Orgrimmar Grunt / Orgrimmar Peon / Orc Mage
-  SELECT 6,              7980,             5624,               18971              UNION ALL -- Deathguard Elite / Undercity Guardian / Undercity Mage
-  SELECT 7,              3212,             19407,              36865              UNION ALL -- Brave Ironhorn / Thunder Bluff Huntsman / Tauren Priest
-  SELECT 8,              18970,            18970,              17935              UNION ALL -- Darkspear Axe Thrower / Darkspear Axe Thrower / Horde Witch Doctor
-  SELECT 9,              16222,            18147,              19006                         -- Silvermoon City Guardian / Silvermoon Ranger / Silvermoon Magister
+  -- race_idx, warrior, paladin, hunter, rogue, priest, death knight, shaman, mage, warlock, druid
+  SELECT 0 AS race_idx, 18948 AS base_warrior,  928 AS base_paladin, 4138 AS base_hunter,  918 AS base_rogue,  376 AS base_priest, 29195 AS base_death_knight, 17204 AS base_shaman, 18949 AS base_mage,   461 AS base_warlock, 4217 AS base_druid UNION ALL
+  SELECT 1,             5113,                5147,               5115,              5165,              5141,              29195,                     17204,             36858,                461,               4217 UNION ALL
+  SELECT 2,             4087,                 928,               4138,              4214,              4090,              29195,                     17204,               331,                461,               4217 UNION ALL
+  SELECT 3,            39252,                 928,               4138,              5167,               376,              29195,                     17204,              5144,               5612,               4217 UNION ALL
+  SELECT 4,            16996,               35281,               4138,               918,               376,              29195,                     17204,             17105,                461,               4217 UNION ALL
+  SELECT 5,             3353,                 928,               3352,              3401,               376,              29195,                      3344,               331,               3324,               4217 UNION ALL
+  SELECT 6,             4593,                 928,               4138,              4584,              4608,              29195,                     17204,              4566,               4563,               4217 UNION ALL
+  SELECT 7,             3042,                 928,               3039,               918,               376,              29195,                      3032,               331,                461,               3034 UNION ALL
+  SELECT 8,             3171,                 928,               4138,              3170,              5994,              29195,                     17519,               331,              23534,               4217 UNION ALL
+  SELECT 9,              914,                 928,               4138,               918,               376,              29195,                     17204,               331,                461,               4217
 ) r
 CROSS JOIN
 (
   -- trainer_id values come from `trainer` table (Type=0, Requirement=<ClassId>)
-  SELECT 0 AS class_idx, 0 AS role_group, 1  AS trainer_id, 'Warrior Trainer'      AS name UNION ALL
-  SELECT 1,              0,               3,                 'Paladin Trainer'      UNION ALL
-  SELECT 2,              1,               7,                 'Hunter Trainer'       UNION ALL
-  SELECT 3,              1,               9,                 'Rogue Trainer'        UNION ALL
-  SELECT 4,              2,               11,                'Priest Trainer'       UNION ALL
-  SELECT 5,              0,               13,                'Death Knight Trainer' UNION ALL
-  SELECT 6,              1,               14,                'Shaman Trainer'       UNION ALL
-  SELECT 7,              2,               16,                'Mage Trainer'         UNION ALL
-  SELECT 8,              2,               31,                'Warlock Trainer'      UNION ALL
-  SELECT 9,              2,               33,                'Druid Trainer'
+  SELECT 0 AS class_idx, 1  AS trainer_id, 'Warrior Trainer'      AS name UNION ALL
+  SELECT 1,              3,                 'Paladin Trainer'      UNION ALL
+  SELECT 2,              7,                 'Hunter Trainer'       UNION ALL
+  SELECT 3,              9,                 'Rogue Trainer'        UNION ALL
+  SELECT 4,              11,                'Priest Trainer'       UNION ALL
+  SELECT 5,              13,                'Death Knight Trainer' UNION ALL
+  SELECT 6,              14,                'Shaman Trainer'       UNION ALL
+  SELECT 7,              16,                'Mage Trainer'         UNION ALL
+  SELECT 8,              31,                'Warlock Trainer'      UNION ALL
+  SELECT 9,              33,                'Druid Trainer'
 ) c;
 
 -- Create templates
@@ -92,5 +99,12 @@ INNER JOIN creature_equip_template cet ON cet.CreatureID = m.base_entry;
 INSERT INTO creature_default_trainer (CreatureId, TrainerId)
 SELECT entry, trainer_id
 FROM tmp_mod_trainers_map;
+
+-- Existing DB spawns created by mod-trainers: force template equipment selection refresh.
+-- (Visual model/equipment updates are fully applied when creatures are reloaded/spawned in world.)
+UPDATE creature
+SET equipment_id = 1
+WHERE Comment LIKE 'mod-trainers:%'
+  AND id1 BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
 
 DROP TEMPORARY TABLE tmp_mod_trainers_map;
