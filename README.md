@@ -6,7 +6,7 @@ Overview
 Spawns permanent, DB-backed class trainer NPCs at your current location.
 
 The trainers are neutral-friendly to everyone and persist across restarts.
-Class visuals and equipped weapons are class-specific per race/class template mapping.
+Trainer visuals are race-preserving and class-appropriate; equipped weapons are class-based.
 
 Commands
 --------
