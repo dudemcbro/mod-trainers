@@ -104,7 +104,7 @@ CROSS JOIN
   SELECT 2,              7,                 'Hunter Trainer'       UNION ALL
   SELECT 3,              9,                 'Rogue Trainer'        UNION ALL
   SELECT 4,              11,                'Priest Trainer'       UNION ALL
-  SELECT 5,              13,                'Death Knight Trainer' UNION ALL
+  SELECT 5,              1013,               'Death Knight Trainer' UNION ALL
   SELECT 6,              14,                'Shaman Trainer'       UNION ALL
   SELECT 7,              16,                'Mage Trainer'         UNION ALL
   SELECT 8,              31,                'Warlock Trainer'      UNION ALL
