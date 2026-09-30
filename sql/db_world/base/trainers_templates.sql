@@ -135,9 +135,14 @@ FROM tmp_mod_trainers_map;
 
 -- Existing DB spawns created by mod-trainers: force template equipment selection refresh.
 -- (Visual model/equipment updates are fully applied when creatures are reloaded/spawned in world.)
-UPDATE creature
-SET equipment_id = 1
-WHERE Comment LIKE 'mod-trainers:%'
-  AND id1 BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
+-- The spawn's entry column is creature.id1 on older cores and creature.id on
+-- AzerothCore since its 2026_06_16_00 update; use whichever this database has.
+SET @CREATURE_ENTRY_COL := IF(EXISTS (SELECT 1 FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'creature' AND COLUMN_NAME = 'id1'), 'id1', 'id');
+SET @SQL := CONCAT('UPDATE creature SET equipment_id = 1 WHERE Comment LIKE ''mod-trainers:%'' AND `',
+    @CREATURE_ENTRY_COL, '` BETWEEN ? AND ?');
+PREPARE stmt FROM @SQL;
+EXECUTE stmt USING @MOD_TRAINERS_ENTRY_BASE, @MOD_TRAINERS_ENTRY_MAX;
+DEALLOCATE PREPARE stmt;
 
 DROP TEMPORARY TABLE tmp_mod_trainers_map;

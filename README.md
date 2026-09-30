@@ -19,7 +19,10 @@ command to spawn permanent class trainer NPCs wherever you stand.
 
 - AzerothCore WotLK (3.3.5a). Developed on the
   [mod-playerbots AzerothCore fork](https://github.com/mod-playerbots/azerothcore-wotlk)
-  (`Playerbot` branch). No core patches are needed.
+  (`Playerbot` branch) and also works on stock
+  [azerothcore-wotlk](https://github.com/azerothcore/azerothcore-wotlk) `master`. The SQL
+  handles both the older `creature.id1` column and the `creature.id` column that
+  AzerothCore uses since its 2026_06_16_00 update. No core patches are needed.
 - [mod-dk](https://github.com/dudemcbro/mod-dk) for the Death Knight trainers. They
   use TrainerId 1013, which mod-dk creates (`dk_trainer_spawns.sql`), so install
   mod-dk's SQL first. Without it those ten templates point at a trainer list that does
