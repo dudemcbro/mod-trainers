@@ -24,7 +24,7 @@ command to spawn permanent class trainer NPCs wherever you stand.
   handles both the older `creature.id1` column and the `creature.id` column that
   AzerothCore uses since its 2026_06_16_00 update. No core patches are needed.
 - [mod-dk](https://github.com/dudemcbro/mod-dk) for the Death Knight trainers. They
-  use TrainerId 1013, which mod-dk creates (`dk_trainer_spawns.sql`), so install
+  use TrainerId 1013, which mod-dk creates (`mod_dk_03_trainer_spawns.sql`), so install
   mod-dk's SQL first. Without it those ten templates point at a trainer list that does
   not exist and offer no spells. To use the stock Death Knight trainer list instead,
   change `1013` to `13` in `data/sql/db-world/mod_trainers_templates.sql`. The
