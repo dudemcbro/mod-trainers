@@ -27,7 +27,7 @@ command to spawn permanent class trainer NPCs wherever you stand.
   use TrainerId 1013, which mod-dk creates (`mod_dk_03_trainer_spawns.sql`), so install
   mod-dk's SQL first. Without it those ten templates point at a trainer list that does
   not exist and offer no spells. To use the stock Death Knight trainer list instead,
-  change `1013` to `13` in `data/sql/db-world/mod_trainers_templates.sql`. The
+  change `1013` to `13` in `data/sql/world/mod_trainers_templates.sql`. The
   worldserver applies the changed file on its next start.
 
 ## Installation
@@ -47,7 +47,7 @@ The module has no configuration file.
 
 ## Database setup
 
-The module's SQL is in `data/sql/db-world/` (there is no characters or auth SQL).
+The module's SQL is in `data/sql/world/` (there is no characters or auth SQL).
 `worldserver` imports it into the world database (usually `acore_world`) on start when
 `Updates.EnableDatabases` in `worldserver.conf` includes the world database (flag `4`,
 part of the default `7`). The updater records each file in that database's `updates`
@@ -55,13 +55,19 @@ table and applies it again when the file changes. The install can be run again s
 Trainers that are already spawned pick up new models and equipment after a
 `worldserver` restart.
 
+The folder is called `world` rather than the skeleton module's `db-world` on purpose:
+cores built before AzerothCore's April 2026 change to module SQL folder matching
+([azerothcore-wotlk#25372](https://github.com/azerothcore/azerothcore-wotlk/pull/25372))
+only import folders named exactly `world`, `characters` and `auth`, and newer cores
+import both.
+
 To apply the SQL by hand instead (for example when the updater is off for the world
-database), run the files in `data/sql/db-world/` against the world database in name
+database), run the files in `data/sql/world/` against the world database in name
 order. There is only one, `mod_trainers_templates.sql`. From the root of your
 AzerothCore source tree:
 
 ```sh
-mysql -u <user> -p acore_world < modules/mod-trainers/data/sql/db-world/mod_trainers_templates.sql
+mysql -u <user> -p acore_world < modules/mod-trainers/data/sql/world/mod_trainers_templates.sql
 ```
 
 ## Usage
@@ -93,7 +99,7 @@ git pull
 ```
 
 Re-run CMake, rebuild and restart `worldserver`. It applies new or changed SQL on
-start. If you apply the SQL by hand, run the files in `data/sql/db-world/` again as
+start. If you apply the SQL by hand, run the files in `data/sql/world/` again as
 above before the restart.
 
 ### Upgrading from a manual install
@@ -118,7 +124,7 @@ Stop `worldserver`, then remove the templates and every trainer spawned with
 `.trainer ... add` (from the root of your AzerothCore source tree):
 
 ```sh
-mysql -u <user> -p acore_world < modules/mod-trainers/data/sql/rollback/db-world/mod_trainers_rollback.sql
+mysql -u <user> -p acore_world < modules/mod-trainers/data/sql/rollback/world/mod_trainers_rollback.sql
 ```
 
 `worldserver` never runs the rollback itself. The rollback also deletes the install's
