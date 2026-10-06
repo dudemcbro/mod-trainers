@@ -1,5 +1,6 @@
 -- mod-trainers rollback
 -- Apply to: acore_world
+-- Manual only: worldserver does not import data/sql/rollback/. See README.
 
 SET @MOD_TRAINERS_ENTRY_BASE := 900100;
 SET @MOD_TRAINERS_NUM_RACES := 10;
@@ -14,3 +15,7 @@ DELETE FROM creature_default_trainer WHERE CreatureId BETWEEN @MOD_TRAINERS_ENTR
 DELETE FROM creature_template_model WHERE CreatureID BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
 DELETE FROM creature_equip_template WHERE CreatureID BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
 DELETE FROM creature_template WHERE entry BETWEEN @MOD_TRAINERS_ENTRY_BASE AND @MOD_TRAINERS_ENTRY_MAX;
+
+-- Forget the automatic install, so worldserver applies it again if the module
+-- is added back later
+DELETE FROM updates WHERE name = 'mod_trainers_templates.sql';
