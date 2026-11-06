@@ -112,8 +112,8 @@ CROSS JOIN
 ) c;
 
 -- Create templates
-INSERT INTO creature_template (entry, name, minlevel, maxlevel, faction, npcflag, type)
-SELECT entry, name, 80, 80, 35, 48, 7
+INSERT INTO creature_template (entry, name, minlevel, maxlevel, faction, npcflag, type, unit_class)
+SELECT entry, name, 80, 80, 35, 48, 7, 1
 FROM tmp_mod_trainers_map;
 
 -- Copy models from class-specific source (keeps class visual identity)
